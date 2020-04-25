@@ -1,17 +1,21 @@
 import React from 'react';
 import './App.css';
 import TaskList from './components/TaskList';
-import { TaskProvider } from './components/TaskContext';
+import { TaskProvider } from './context/TaskContext';
 import Modal from './components/Modal';
+import AddButton from './components/AddButton';
+import Header from './components/Header';
 
 function App() {
   return (
-    <TaskProvider>
-      <div className="App">
+    <div className="App">
+      <Header />
+      <TaskProvider>
         <TaskList />
         <Modal />
-      </div>
-    </TaskProvider>
+        <AddButton />
+      </TaskProvider>
+    </div>
   );
 }
 

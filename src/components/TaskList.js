@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import Task from './Task';
-import { TaskContext } from './TaskContext';
+import { TaskContext } from '../context/TaskContext';
+import { List, Typography } from '@material-ui/core';
 
 const TaskList = () => {
   const { tasks } = useContext(TaskContext);  
@@ -12,11 +13,11 @@ const TaskList = () => {
   }
 
   return (
-    <div>
+    <List>
       {tasks.length ? renderTasks() : (
-        <div>No tasks...</div>
+        <Typography component="span" variant="body2">No tasks...</Typography>
       )}      
-    </div>
+    </List>
   );
 }
 

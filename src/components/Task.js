@@ -1,23 +1,55 @@
 import React, { useContext } from 'react';
-import { TaskContext } from './TaskContext';
+import { makeStyles } from '@material-ui/core/styles';
+import { TaskContext } from '../context/TaskContext';
+import { ListItem, ListItemText, Checkbox, IconButton, ListItemSecondaryAction, Typography, ListItemIcon } from '@material-ui/core';
+import { Delete, Edit } from '@material-ui/icons';
+
+const useStyles = makeStyles(() => ({
+  secondaryAction: {
+    paddingRight: 100,
+  },
+}));
+
 const Task = ({ title, descr, status, id }) => {
 
   const { removeTask, findTask, editTask } = useContext(TaskContext);
- 
+  
+  const classes = useStyles();
+  
   const updateStatus = (event) => {
-    editTask({id, status: event.target.checked});
+    editTask({ id, status: event.target.checked });
   }
 
   return (
-    <article className='task' id={id}>
-      <h3>{title}</h3>
-      <div>{descr}</div>
-      <input type='checkbox' defaultChecked={status} onChange={updateStatus} />
-      <div>
-        <button type='button' onClick={() => findTask(id)}>edit</button>
-        <button type='button' onClick={() => removeTask(id)}>delete</button>
-      </div>
-    </article>
+
+    <ListItem id={id} className={classes.secondaryAction} divider>
+      <ListItemIcon>
+        <Checkbox
+          edge="start"
+          checked={status}
+          disableRipple
+          onChange={updateStatus}
+        />
+      </ListItemIcon>
+      <ListItemText
+        primary={title}
+        secondary={ descr ? <Typography component="span" variant="body2">{descr}</Typography> : null }
+      />
+      <ListItemSecondaryAction>
+        <IconButton
+          aria-label="edit"
+          onClick={() => findTask(id)}
+          tabIndex='0'>
+          <Edit />
+        </IconButton>
+        <IconButton
+          aria-label="delete"
+          tabIndex='1'
+          onClick={() => removeTask(id)}>
+          <Delete />
+        </IconButton>
+      </ListItemSecondaryAction>
+    </ListItem>
   );
 }
 

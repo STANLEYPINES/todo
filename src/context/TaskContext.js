@@ -8,14 +8,23 @@ export const TaskProvider = props => {
 
   const [tasks, setTasks] = useState(initialState);
 
-  useEffect(() => {
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-  }, [tasks]); 
-
   const [editItem, setEditItem] = useState(null);
 
+  const [modalStatus, setModalStatus] = useState(false);
+
+  const compareItems = (a, b) => a.title.localeCompare(b.title);
+
+  const sortByTitle = (array) => {
+    const clonedArray = array.slice(0);
+    return clonedArray.sort(compareItems).reverse();
+  }
+
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+  }, [tasks]);
+
   const addTask = (newTask) => {
-    setTasks(prevTasks => [...prevTasks, { ...newTask, id: uuid() }]);
+    setTasks(prevTasks => sortByTitle([...prevTasks, { ...newTask, id: uuid() }]));
   }
 
   const removeTask = (id) => {
@@ -30,7 +39,7 @@ export const TaskProvider = props => {
     const updatedTasks = tasks.map(task => (
       task.id === editedTask.id ? { ...task, ...editedTask } : task
     ));
-    setTasks(updatedTasks);
+    setTasks(sortByTitle(updatedTasks));
     setEditItem(null);
   }
 
@@ -48,7 +57,9 @@ export const TaskProvider = props => {
         clearAll, 
         findTask, 
         editTask, 
-        editItem 
+        editItem,
+        modalStatus,
+        setModalStatus 
       }}>
       {props.children}
     </TaskContext.Provider>
